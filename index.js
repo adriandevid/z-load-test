@@ -19,7 +19,7 @@ files.forEach(function (dir) {
                 id: scenario,
                 path: dir,
                 scenario: indexOfScenarioForExecute,
-                command: `k6 run --out web-dashboard=export=./scenarios/${dir}/${scenario}/reports/${indexOfScenarioForExecute.split(".")[0]}_{time}.html ./scenarios/${dir}/${scenario}/${indexOfScenarioForExecute}`
+                command: `k6 run --out web-dashboard=export=./scenarios/${dir}/${scenario}/reports/${indexOfScenarioForExecute.split(".")[0]}.html ./scenarios/${dir}/${scenario}/${indexOfScenarioForExecute}`
             };
 
             counter++
@@ -35,12 +35,7 @@ console.log("\n")
 console.log("scenarios: \n"+ options);
 
 readline.question(`$: `, num1 => {
-    var time = `${new Date().toLocaleDateString().replaceAll("/", "-")}_${new Date().toLocaleTimeString().replaceAll(":", "_")}`;
-    
-    file_scenarios[num1].command = file_scenarios[num1].command.replaceAll("{time}", time);
-
     exec(file_scenarios[num1].command, (err, outs, errs) => {
-        console.log(outs)
         readline.close();
     });
 });
