@@ -13,11 +13,13 @@ var counter = 0;
 
 files.forEach(function (dir) {
     fs.readdirSync(`./scenarios/${dir}/`).forEach(function(scenario) {
-        if(scenario.includes("js")) {
+        if(!scenario.includes("js")) {
+            var indexOfScenarioForExecute = fs.readdirSync(`./scenarios/${dir}/${scenario}`)[0];
             file_scenarios[counter.toString()] = {
-                id: dir,
-                scenario: scenario,
-                command: `k6 run --out web-dashboard=export=./scenarios/${dir}/reports/${scenario.split(".")[0]}_{time}.html ./scenarios/${dir}/${scenario}`
+                id: scenario,
+                path: dir,
+                scenario: indexOfScenarioForExecute,
+                command: `k6 run --out web-dashboard=export=./scenarios/${dir}/${scenario}/reports/${indexOfScenarioForExecute.split(".")[0]}_{time}.html ./scenarios/${dir}/${scenario}/${indexOfScenarioForExecute}`
             };
 
             counter++
@@ -25,8 +27,7 @@ files.forEach(function (dir) {
     })
 })
 
-
-var options = Object.keys(file_scenarios).map((key) => `${key} - ${file_scenarios[key].id} - ${file_scenarios[key].scenario}`).join("\n");
+var options = Object.keys(file_scenarios).map((key) => `${key} - ${file_scenarios[key].path} - ${file_scenarios[key].id}`).join("\n");
 
 console.log("==============================================");
 console.log("select a scenario: ");
@@ -39,6 +40,7 @@ readline.question(`$: `, num1 => {
     file_scenarios[num1].command = file_scenarios[num1].command.replaceAll("{time}", time);
 
     exec(file_scenarios[num1].command, (err, outs, errs) => {
+        console.log(outs)
         readline.close();
     });
 });
