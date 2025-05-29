@@ -8,8 +8,8 @@ export const options = {
 export default function loginUser() {
     const url = 'http://localhost:5113/user/login';
     const payload = JSON.stringify({
-        email: "asadas234234rewytryr@gmail.com",
-        password: "Denis12#!"
+        email: "****",
+        password: "****"
     });
 
     const params = {
